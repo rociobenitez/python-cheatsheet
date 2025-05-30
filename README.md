@@ -21,16 +21,16 @@
   <a href="#oop"><img src="https://img.shields.io/badge/OOP-blue.svg" alt="OOP"/></a>
   <a href="#concurrencia"><img src="https://img.shields.io/badge/Concurrencia-blue.svg" alt="Concurrencia"/></a>
   <a href="#red-y-correo"><img src="https://img.shields.io/badge/Red%20%26%20Correo-blue.svg" alt="Red y correo"/></a>
-  <a href="#entornos--dependencias"><img src="https://img.shields.io/badge/Entornos--Dependencias-blue.svg" alt="Entornos"/></a>
-  <a href="#io--archivos"><img src="https://img.shields.io/badge/I%2FO%20%26%20Archivos-blue.svg" alt="I/O y archivos"/></a>
+  <a href="#entornos-dependencias"><img src="https://img.shields.io/badge/Entornos--Dependencias-blue.svg" alt="Entornos"/></a>
+  <a href="#io-archivos"><img src="https://img.shields.io/badge/I%2FO%20%26%20Archivos-blue.svg" alt="I/O y archivos"/></a>
   <a href="#bases-de-datos"><img src="https://img.shields.io/badge/Bases%20de%20Datos-blue.svg" alt="Bases de datos"/></a>
-  <a href="#testing--debugging"><img src="https://img.shields.io/badge/Testing%20%26%20Debugging-blue.svg" alt="Testing"/></a>
+  <a href="#testing-debugging"><img src="https://img.shields.io/badge/Testing%20%26%20Debugging-blue.svg" alt="Testing"/></a>
   <a href="#fecha-tiempo-math"><img src="https://img.shields.io/badge/Fecha%20%26%20Math-blue.svg" alt="Fecha y math"/></a>
-  <a href="#librerias-populares"><img src="https://img.shields.io/badge/Librer%C3%ADas%20Populares-blue.svg" alt="Librerías populares"/></a>
+  <a href="#data-science"><img src="https://img.shields.io/badge/Data%20Science-blue.svg" alt="Data Science"/></a>
   <a href="#otros-paquetes"><img src="https://img.shields.io/badge/Otros%20Paquetes-blue.svg" alt="Otros paquetes"/></a>
 </p>
 
-## 📚 Índice de contenido
+# Índice de contenido
 
 **Tipos de datos:** [`Números`](#numeros) | [`Strings`](#strings) | [`Booleanos`](#booleanos) | [`None`](#none) | [`Lists`](#lists) | [`Tuples`](#tuples) | [`Sets`](#sets) | [`Dictionaries`](#dictionaries) | [`Conversión de tipos`](#conversión-de-tipos)
 
@@ -54,7 +54,7 @@
 
 - [`Lectura y escritura de archivos`](#lectura-escritura-archivos) | [`Rutas y directorios`](#rutas-y-directorios)
 - Formatos: [`open`](#open) | [`csv`](#csv) | [`json`](#json) | [`html`/`xml`](#html-xml)
-- Binario: [`pickle`](#pickle) | [`zipfile`](#zipfile) | [`tarfile`](#tarfile)
+- Binario: [`zipfile`](#zipfile) | [`tarfile`](#tarfile)
 - Sistema: [`pathlib`](#pathlib) | [`os, sys`](#files) | [`subprocess`](#subprocess)
 
 **Bases de datos:** [`sqlite3`](#sqlite3) | [`MySQL`/`PostgreSQL`](#mysql-postgresql) | [`ORM`](#orm)
@@ -1675,7 +1675,7 @@ for t in threads:
     t.join()
 ```
 
-> 🔗 [Más información sobre `threading` - Docs Python](https://docs.python.org/es/3.13/library/threading.html)
+> 🔗 Más información: [`threading` - Docs Python](https://docs.python.org/es/3.13/library/threading.html)
 
 ### `multiprocessing`
 
@@ -1700,7 +1700,7 @@ if __name__ == '__main__':
     p.join() # Esperar a que el proceso termine
 ```
 
-> 🔗 [Más información sobre `multiprocessing` - Docs Python](https://docs.python.org/es/3.13/library/multiprocessing.html)
+> 🔗 Más información: [`multiprocessing` - Docs Python](https://docs.python.org/es/3.13/library/multiprocessing.html)
 
 ### `asyncio`
 
@@ -1715,7 +1715,7 @@ async def main():
 asyncio.run(main()) # Iniciar proceso
 ```
 
-> 🔗 [Más información sobre `asyncio` - Docs Python](https://docs.python.org/es/3.13/library/asyncio.html)
+> 🔗 Más información: [`asyncio` - Docs Python](https://docs.python.org/es/3.13/library/asyncio.html)
 
 # Red y correo
 
@@ -1762,7 +1762,7 @@ with smtplib.SMTP('smtp.gmail.com', 587) as smtp: # host, puerto
     smtp.quit() # Cerrar conexión
 ```
 
-> 🔗 [Más información sobre `smtplib` - Docs Python](https://docs.python.org/es/3.13/library/smtplib.html)
+> 🔗 Más información: [`smtplib` - Docs Python](https://docs.python.org/es/3.13/library/smtplib.html)
 
 #### **Uso de plantillas**
 
@@ -1825,7 +1825,9 @@ ftp.retrlines("LIST")
 
 > 🔗 Más información: [`ftplib` - Docs Python](https://docs.python.org/es/3.13/library/ftplib.html)
 
-# Módulos y gestión de paquetes
+<a name="entornos-dependencias"></a>
+
+# Módulos, entornos y dependencias
 
 <a name="modulos"></a>
 
@@ -2075,7 +2077,13 @@ pipenv --venv
 poetry add nombre_paquete
 ```
 
-# Entrada/Salida y sistema de archivos
+🔗 [Documentación Poetry](https://python-poetry.org/)
+
+<br>
+
+<a name="io-archivos"></a>
+
+# I/O y sistema de archivos
 
 <a name="lectura-escritura-archivos"></a>
 
@@ -2163,8 +2171,6 @@ def read_file(nombre_archivo):
 for line in read_file(nombre_archivo):
     print(line)
 ```
-
-<a name="lectura-escritura-path"></a>
 
 ### Lectura y escritura con `Path`
 
@@ -2331,6 +2337,113 @@ def init(graphql, **_):
     print(f"{graphql}")
 ```
 
+<a name="csv"></a>
+
+## `csv`
+
+```python
+import csv
+
+# Lectura
+with open('carpeta/archivo.csv', encoding='urf-8') as archivo: # Modo lectura por defecto
+    return csv.reader(archivo, delimiter=';')  # Este objeto se puede iterar
+
+with open('carpeta/archivo.csv', encoding='urf-8') as archivo: # Modo lectura por defecto
+    reader = csv.reader(archivo, delimiter=';')
+    return list(reader)  # O pasarlo como una lista
+
+with open('carpeta/archivo.csv', encoding='urf-8') as archivo: # Modo lectura por defecto
+    reader = csv.reader(archivo, delimiter=';')
+    for linea in reader:
+        print(linea)  # Mostrar línea a línea
+```
+
+```python
+# Escritura
+def write_to_csv_file(nombre_archivo, rows)
+    with open(nombre_archivo, 'w', encoding='urf-8') as archivo:
+        writer = csv.writer(archivo, delimiter=';')
+        writer.writerow()
+        writer.writerows(rows)
+```
+
+```python
+import os
+
+# Actualizar CSV
+with open('carpeta/archivo.csv') as r, open('carpeta/archivo_temporal.csv', 'w') as w:
+    reader = csv.reader(r)
+    writer = csv.writer(w)
+    for linea in reader:
+        if linea[0] == "826": # supongamos que es el ID del usuario
+            writer.whiterow([826, 'Rocío', 'texto modificado'])
+        else:
+            writer.writerow(linea)
+    os.remove('carpeta/archivo.csv')
+    os.rename('carpeta/archivo_temp.csv', 'carpeta/archivo.csv')
+```
+
+<a name="json"></a>
+
+## `json`
+
+```python
+import json
+
+# Codificación
+json.dumps("\"foo\bar") # "\"foo\bar"
+json.dumps({"c": 0, "b": 0, "a": 0}, sort_keys=True)) # {"a": 0, "b": 0, "c": 0}
+
+# Mejor visualización
+json.dumps({'6': 7, '4': 5}, sort_keys=True, indent=4)
+# {
+#     "4": 5,
+#     "6": 7
+# }
+
+# Decodificación JSON
+json.loads('["rocio", {"bar":["baz", null, 1.0, 2]}]') # ['rocio', {'bar': ['baz', None, 1.0, 2]}]
+json.loads('"\\"foo\\bar"') # '"foo\x08ar'
+```
+
+🔗 Más información: [`json` - Docs Python](https://docs.python.org/es/3/library/json.html)
+
+<a name="html-xml"></a>
+
+## `html / xml`
+
+🔗 Más información: [`html` - Docs Python](https://docs.python.org/es/3.13/library/html.parser.html)
+
+<a name="zipfile"></a>
+
+## Archivos comprimidos - `zipfile`
+
+```python
+from zipfile import ZipFile
+
+# Escritura
+with ZipFile("archivos/comprimidos.zip", "w") as zip:
+    for path in Path().rglob("*.*"):   # Cualquier archivo (cualquier nombre, cualquier extensión)
+        if str(path) != "archivos/comprimidos.zip":
+            zip.write(path)
+
+# Lectura
+with ZipFile("archivos/comprimidos") as zip:
+    print(zip.namelist())  # Muestra los archivos comprimidos
+    info = zip.getinfo("archivos/comprimidos.py")
+    print(
+        info.file_size,      # Tamaño del archivo original
+        info.compress_size   # Tamaño del archivo comprimido
+    )
+    zip.extractall("archivos/descomprimidos") # Extrae los archivos comprimidos
+```
+
+<a name="tarfile"></a>
+
+## `tarfile`
+
+🔗 Más información: [`tarfile` - Docs Python](https://docs.python.org/es/3/library/tarfile.html)
+
 <a name="files"></a>
 
 ## `os, sys`
@@ -2355,30 +2468,6 @@ sys.argv     # Argumentos del script (como lista)
 sys.exit()   # Finaliza el programa (salir del programa)
 sys.path     # Rutas de búsqueda de módulos
 sys.version  # Versión de Python
-```
-
-<a name="zipfile"></a>
-
-## Archivos comprimidos - `zipfile`
-
-```python
-from zipfile import ZipFile
-
-# Escritura
-with ZipFile("archivos/comprimidos.zip", "w") as zip:
-    for path in Path().rglob("*.*"):   # Cualquier archivo (cualquier nombre, cualquier extensión)
-        if str(path) != "archivos/comprimidos.zip":
-            zip.write(path)
-
-# Lectura
-with ZipFile("archivos/comprimidos") as zip:
-    print(zip.namelist())  # Muestra los archivos comprimidos
-    info = zip.getinfo("archivos/comprimidos.py")
-    print(
-        info.file_size,      # Tamaño del archivo original
-        info.compress_size   # Tamaño del archivo comprimido
-    )
-    zip.extractall("archivos/descomprimidos") # Extrae los archivos comprimidos
 ```
 
 <a name="subprocess"></a>
@@ -2407,6 +2496,8 @@ with open("salida.txt", "w") as f:
 ```
 
 > Usa `subprocess.run()` en lugar de `os.system()` para mayor control y seguridad.
+
+<br>
 
 <a name="bbdd"></a>
 
@@ -2488,7 +2579,21 @@ print(cursor.fetchone())    # Muestra el primer resultado
 print(cursor.fetchmany(2))  # Muestra los siguientes 2 resultados
 ```
 
-<a name="test-debug"></a>
+<a name="mysql-postgresql"></a>
+
+## MySQL / PostgreSQL
+
+🔗 [PostgreSQL](https://www.postgresql.org/)
+
+<a name="orm"></a>
+
+## ORM
+
+🔗 [Full Stack Python - Object-relational Mappers (ORMs)](https://www.fullstackpython.com/object-relational-mappers-orms.html)
+
+<br>
+
+<a name="testing-debugging"></a>
 
 # Testing y debugging
 
@@ -2577,6 +2682,10 @@ def funcion_a_testear():
 ```
 
 🔗 [Documentación de pytest](https://docs.pytest.org/en/stable/)
+
+<br>
+
+<a name="fecha-tiempo-math"></a>
 
 # Fechas, números y texto
 
@@ -2733,64 +2842,6 @@ re.search(r"^[a-zA-Z0-9]+$", "123456")   # Devuelve True
 re.findall(r"^[a-zA-Z0-9]+$", "123456")  # Devuelve ['123456']
 ```
 
-<a name="csv"></a>
-
-## `csv`
-
-```python
-import csv
-
-# Lectura
-with open('carpeta/archivo.csv', encoding='urf-8') as archivo: # Modo lectura por defecto
-    return csv.reader(archivo, delimiter=';')  # Este objeto se puede iterar
-
-with open('carpeta/archivo.csv', encoding='urf-8') as archivo: # Modo lectura por defecto
-    reader = csv.reader(archivo, delimiter=';')
-    return list(reader)  # O pasarlo como una lista
-
-with open('carpeta/archivo.csv', encoding='urf-8') as archivo: # Modo lectura por defecto
-    reader = csv.reader(archivo, delimiter=';')
-    for linea in reader:
-        print(linea)  # Mostrar línea a línea
-```
-
-```python
-# Escritura
-def write_to_csv_file(nombre_archivo, rows)
-    with open(nombre_archivo, 'w', encoding='urf-8') as archivo:
-        writer = csv.writer(archivo, delimiter=';')
-        writer.writerow()
-        writer.writerows(rows)
-```
-
-```python
-import os
-
-# Actualizar CSV
-with open('carpeta/archivo.csv') as r, open('carpeta/archivo_temporal.csv', 'w') as w:
-    reader = csv.reader(r)
-    writer = csv.writer(w)
-    for linea in reader:
-        if linea[0] == "826": # supongamos que es el ID del usuario
-            writer.whiterow([826, 'Rocío', 'texto modificado'])
-        else:
-            writer.writerow(linea)
-    os.remove('carpeta/archivo.csv')
-    os.rename('carpeta/archivo_temp.csv', 'carpeta/archivo.csv')
-```
-
-<a name="json"></a>
-
-## `json`
-
-<a name="pickle"></a>
-
-## `pickle`
-
-<a name="html-xml"></a>
-
-## `html / xml`
-
 <a name="webbrowser"></a>
 
 ## `webbrowser`
@@ -2801,15 +2852,13 @@ import webbrowser
 webbrowser.open("https://www.google.com")
 ```
 
-# Librerías populares de Python
+<br>
 
-**[`requests`](#requests) | [`numpy`](#numpy) | [`pandas`](#pandas) | [`matplotlib`](#matplotlib) | [`seaborn`](#seaborn) | [`beautifulsoup4`](#beautifulsoup4) | [`selenium`](#selenium) | [`scipy`](#scipy) | [`scikit-learn`](#scikit-learn) | [`tensorflow`](#tensorflow) | [`keras`](#keras)**
+<a name="data-science"></a>
 
-## Paquetes nativos de Python
+# Data Science
 
-## Paquetes populares de Python
-
-### `requests`
+<a name="numpy"></a>
 
 ### `numpy`
 
@@ -2823,6 +2872,8 @@ pip install numpy
 import numpy as np
 ```
 
+<a name="pandas"></a>
+
 ### `pandas`
 
 [Pandas](https://pandas.pydata.org/) es una biblioteca para análisis de datos en Python.
@@ -2834,6 +2885,8 @@ pip install pandas
 ```python
 import pandas as pd
 ```
+
+<a name="matplotlib"></a>
 
 ### `matplotlib`
 
@@ -2847,6 +2900,8 @@ pip install matplotlib
 import matplotlib.pyplot as plt
 ```
 
+<a name="seaborn"></a>
+
 ### `seaborn`
 
 [Seaborn](https://seaborn.pydata.org/) es una biblioteca para visualización de datos en Python.
@@ -2858,6 +2913,8 @@ pip install seaborn
 ```python
 import seaborn as sns
 ```
+
+<a name="beatifulsoup4"></a>
 
 ### `beautifulsoup4`
 
@@ -2872,6 +2929,8 @@ from bs4 import BeautifulSoup
 
 soup = BeautifulSoup(html_content, 'html.parser')
 ```
+
+<a name="selenium"></a>
 
 ### `selenium`
 
@@ -2888,6 +2947,8 @@ driver = webdriver.Chrome()
 driver.get("https://www.google.com")
 ```
 
+<a name="scipy"></a>
+
 ### `scipy`
 
 [SciPy](https://scipy.org/) es una biblioteca para cálculos científicos en Python.
@@ -2901,6 +2962,8 @@ import scipy
 
 scipy.stats.norm.pdf(0) # Devuelve la densidad de probabilidad de la distribución normal en 0
 ```
+
+<a name="scikit-learn"></a>
 
 ### `scikit-learn`
 
@@ -2916,6 +2979,8 @@ from sklearn.linear_model import LinearRegression
 model = LinearRegression()
 model.fit(X, y)
 ```
+
+<a name="tensorflow"></a>
 
 ### `tensorflow`
 
@@ -2933,6 +2998,8 @@ model = tf.keras.models.Sequential([
 ])
 ```
 
+<a name="keras"></a>
+
 ### `keras`
 
 [Keras](https://keras.io/) es una biblioteca para aprendizaje automático en Python.
@@ -2949,7 +3016,9 @@ model = keras.Sequential([
 ])
 ```
 
-## Otros paquetes de Python
+<a name="otros-paquetes"></a>
+
+# Otros paquetes
 
 ### `gdown`
 
