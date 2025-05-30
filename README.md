@@ -18,7 +18,7 @@
   <a href="#control-de-flujo"><img src="https://img.shields.io/badge/Control%20Flujo-blue.svg" alt="Control de flujo"/></a>
   <a href="#funciones"><img src="https://img.shields.io/badge/Funciones-blue.svg" alt="Funciones"/></a>
   <a href="#estructuras-funcionales"><img src="https://img.shields.io/badge/Funcional-blue.svg" alt="Funcional"/></a>
-  <a href="#programacion-orientada-a-objetos"><img src="https://img.shields.io/badge/OOP-blue.svg" alt="OOP"/></a>
+  <a href="#oop"><img src="https://img.shields.io/badge/OOP-blue.svg" alt="OOP"/></a>
   <a href="#concurrencia"><img src="https://img.shields.io/badge/Concurrencia-blue.svg" alt="Concurrencia"/></a>
   <a href="#red-y-correo"><img src="https://img.shields.io/badge/Red%20%26%20Correo-blue.svg" alt="Red y correo"/></a>
   <a href="#entornos--dependencias"><img src="https://img.shields.io/badge/Entornos--Dependencias-blue.svg" alt="Entornos"/></a>
@@ -1273,7 +1273,11 @@ next(counter)  # 14
 
 Un **generator** es más eficiente (no guarda todos los valores en memoria, sino que genera uno a uno). Son ideales para **secuencias infinitas** o grandes.
 
+<a name="oop"></a>
+
 # Programación orientada a objetos
+
+<a name="clases"></a>
 
 ## Clases
 
@@ -1634,6 +1638,85 @@ with MyOpen('example.txt') as f:
     print(f.read())
 ```
 
+<a name="concurrencia"></a>
+
+# Concurrencia
+
+### `threading`
+
+```python
+import threading
+import time
+
+def crawl(link, delay=3):
+    print(f"crawl started for {link}")
+    time.sleep(delay)  # Bloqueante I/O (simulando una petición de red)
+    print(f"crawl ended for {link}")
+
+links = [
+    "https://python.org",
+    "https://docs.python.org",
+    "https://peps.python.org",
+]
+
+# Iniciar hilos para cada enlace
+threads = []
+for link in links:
+    # Usando `args` para pasar argumentos posicionales y `kwargs` para pasar argumentos nombrados
+    t = threading.Thread(target=crawl, args=(link,), kwargs={"delay": 2})
+    threads.append(t)
+
+# Iniciar cada hilo
+for t in threads:
+    t.start()
+
+# Espera a que todos los hilos terminen
+for t in threads:
+    t.join()
+```
+
+> 🔗 [Más información sobre `threading` - Docs Python](https://docs.python.org/es/3.13/library/threading.html)
+
+### `multiprocessing`
+
+```python
+from multiprocessing import Process
+import os
+
+def info(title):
+    print(title)
+    print('module name:', __name__)
+    print('parent process:', os.getppid())
+    print('process id:', os.getpid())
+
+def f(name):
+    info('function f') # Información de la función
+    print('hello', name) # Salida de la función
+
+if __name__ == '__main__':
+    info('main line') # Información del proceso principal
+    p = Process(target=f, args=('Rocío',)) # Crear proceso
+    p.start() # Iniciar proceso
+    p.join() # Esperar a que el proceso termine
+```
+
+> 🔗 [Más información sobre `multiprocessing` - Docs Python](https://docs.python.org/es/3.13/library/multiprocessing.html)
+
+### `asyncio`
+
+```python
+import asyncio
+
+async def main():
+    print("Hola...")
+    await asyncio.sleep(1)
+    print("Rocío!")
+
+asyncio.run(main()) # Iniciar proceso
+```
+
+> 🔗 [Más información sobre `asyncio` - Docs Python](https://docs.python.org/es/3.13/library/asyncio.html)
+
 # Red y correo
 
 ### `webbrowser`
@@ -1678,6 +1761,8 @@ with smtplib.SMTP('smtp.gmail.com', 587) as smtp: # host, puerto
     smtp.send_message(mensaje) # Enviar correo
     smtp.quit() # Cerrar conexión
 ```
+
+> 🔗 [Más información sobre `smtplib` - Docs Python](https://docs.python.org/es/3.13/library/smtplib.html)
 
 #### **Uso de plantillas**
 
