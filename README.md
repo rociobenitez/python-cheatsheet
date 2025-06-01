@@ -2132,7 +2132,7 @@ texto = archivo.readlines()  # Devuelve una lista de líneas
 archivo.seek(0) # Se desplaza al inicio del archivo
 ```
 
-<a name="lectura-escritura-open"></a>
+<a name="open"></a>
 
 ### Lectura y escritura con `with`
 
