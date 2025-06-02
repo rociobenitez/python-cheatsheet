@@ -1343,34 +1343,43 @@ Un **generator** es más eficiente (no guarda todos los valores en memoria, sino
 ### Definición de clase e instancias
 
 ```python
-Class MyClass:
-    def __init__(self, a): # Constructor
-        self.a = a         # Propiedad
+class NombreClase(object): # Definir clase
+
+    class_atribute = value # Atributo de clase (compartido por todas las instancias)
+
+    def __init__(self, a): # Constructor (inicializa atributos de instancia)
+        self.a = a         # Atributo (dato)
     def __str__(self):
         return str(self.a)
     def __repr__(self):
         class_name = self.__class__.__name__
         return f"{class_name}({self.a!r})"
 
-    @classmethod           # Decorador
+    def metodo1(self, parametro1, parametro2, ...):
+        # Lógica del método
+        pass
+
+    # Más métodos aquí
+
+    @classmethod              # Decorador
     def get_class_name(cls):
         return cls.__name__
 ```
 
 ```python
 class Perro:  # Clase
-    especie = "Canis lupus"     # Atributo de clase
+    especie = "Canis lupus" # Atributo de clase
 
-    def __init__(self, nombre, edad):
-        self.__nombre = nombre  # Atributo privado (encapsulado)
-        self.edad = edad        # Atributo público
+    def __init__(self, nombre, edad): # Parámetros: self, nombre, edad
+        self.__nombre = nombre        # Atributo privado (encapsulado)
+        self.edad = edad              # Atributo público
 
-    def hablar(self):           # Método de instancia
+    def hablar(self):                 # Método de instancia (función)
         print("¡Guau!")
 ```
 
 ```python
-mi_perro = Perro("Noa", 6)  # Instancia de la clase
+mi_perro = Perro("Noa", 6)  # Instancia de la clase (objeto basado en esa clase)
 mi_perro                    # "Perro(nombre=Noa, edad=6)"
 mi_perro.name               # "Noa"
 mi_perro.hablar()           # "¡Guau!"
@@ -1474,6 +1483,11 @@ print(nuevo_perro.name) # "Coco"
 mi_perro.__dict__           # {'_Perro__nombre': 'Noa', 'edad': 6}
 isinstance(mi_perro, Perro) # True
 type(mi_perro)              # <class '__main__.Perro'>
+```
+
+```python
+dir(mi_perro)
+# ['_Perro__nombre', '__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', 'edad', 'especie', 'hablar']
 ```
 
 ## Herencia
@@ -2183,12 +2197,27 @@ texto = archivo.readlines()  # Devuelve una lista de líneas
 - `a` - Agregar, añadir
 - `w+` - Lectura y escritura
 - `r+` - Lectura y escritura desde el principio
-- `a+` - Lectura y escritura desde el final
+- `a+` - Lectura y escritura desde el final. Si el archivo no existe, lo crea
 - `t` - Modo texto
+  - `rt` - Modo lectura de texto
+  - `wt` - Modo escritura de texto
+  - `at` - Modo anexado de texto
 - `b` - Modo binario
+  - `rb` - Modo lectura binaria
+  - `wb` - Modo escritura binaria
+  - `ab` - Modo anexado binario
 
 ```python
 archivo.seek(0) # Se desplaza al inicio del archivo
+```
+
+```python
+archivo.mode      # Modo de apertura del archivo
+archivo.name      # Nombre del archivo
+archivo.closed    # True si el archivo está cerrado
+archivo.encoding  # Codificación del archivo
+archivo.newlines  # Número de nuevas líneas
+archivo.softspace # True si el archivo está cerrado
 ```
 
 <a name="open"></a>
@@ -2197,38 +2226,70 @@ archivo.seek(0) # Se desplaza al inicio del archivo
 
 ```python
 # Leer archivo completo
-with open("archivo.txt", "r", encoding="utf-8") as f:
+with open("ruta-archivo/archivo.txt", "r", encoding="utf-8") as f:
     contenido = f.read()
 
 # Leer líneas como lista
-with open("archivo.txt", "r", encoding="utf-8") as f:
-    lineas = f.readlines()
+with open("ruta-archivo/archivo.txt", "r", encoding="utf-8") as f:
+    lineas = f.readlines()  # Lee todas las líneas
+    line = f.readline(10)   # Lee los primeros 10 caracteres de la primera línea
 
 # Escribir (sobrescribe)
-with open("archivo.txt", "w") as f:
+with open("ruta-archivo/archivo.txt", "w") as f:
     f.write("Hola mundo")
 
 # Añadir (append)
-with open("archivo.txt", "a") as f:
+with open("ruta-archivo/archivo.txt", "a") as f:
     f.write("\nNueva línea")
 
 # Escritura de múltiples líneas
-with open("archivo.txt", "w") as f:
+with open("ruta-archivo/archivo.txt", "w") as f:
     f.writelines(["Línea 1\n", "Línea 2\n"])
 ```
 
-- El uso de `with` asegura que el archivo se **cierre automáticamente**.
+- El uso de `with` asegura que el archivo se **cierre automáticamente** _(mejor práctica)_.
 - Usa `"rb"` / `"wb"` para archivos binarios.
 
 #### **Leer texto de un archivo**
 
 ```python
 def read_file(nombre_archivo):
-    with open('carpeta/nombre_archivo.txt', encoding='utf-8') as file:
+    with open('ruta-archivo/nombre_archivo.txt', encoding='utf-8') as file:
         return file.readlines()
 
 for line in read_file(nombre_archivo):
     print(line)
+```
+
+#### **Leer y copiar contenido de un archivo a otro**
+
+```python
+with open('ruta-archivo/nombre_archivo.txt', 'r') as source_file:
+    with open('ruta-archivo/nombre_archivo_copia.txt', 'w') as destination_file:
+        for line in source_file:
+            destination_file.write(line)  # Copia línea a línea
+```
+
+#### **Escribir múltiples líneas en un archivo usando una lista**
+
+```python
+lineas = ["Esta es la línea 1", "Esta es la línea 2", "Esta es la línea 3"]
+
+# nuevo archivo Example.txt para escribit
+with open('Example.txt', 'w') as file:
+    for linea in lineas:
+        file.write(linea + "\n")
+    # file se cierra automáticamente cuando el bloque 'with' termina
+```
+
+#### **Agregar datos a un archivo existente**
+
+```python
+new_data = "Esta es la línea R"
+
+# Abrir un archivo existente Example2.txt para agregar datos
+with open('Example2.txt', 'a') as file1:
+    file1.write(new_data + "\n")  # Línea agregada al final del archivo
 ```
 
 ### Lectura y escritura con `Path`
@@ -2919,7 +2980,7 @@ webbrowser.open("https://www.google.com")
 
 <a name="numpy"></a>
 
-### `numpy`
+## `numpy`
 
 [NumPy](https://numpy.org/) es una biblioteca para cálculos numéricos en Python.
 
@@ -2933,7 +2994,7 @@ import numpy as np
 
 <a name="pandas"></a>
 
-### `pandas`
+## `pandas`
 
 [Pandas](https://pandas.pydata.org/) es una biblioteca para análisis de datos en Python.
 
@@ -2945,9 +3006,118 @@ pip install pandas
 import pandas as pd
 ```
 
+### Series
+
+```python
+# Crear una Serie desde una lista
+data = [10, 20, 30, 40, 50]
+s = pd.Series(data)
+
+s         # Imprime la serie
+s[2])     # 30
+s.iloc[3] # 40
+s[1:4]    # [20, 30, 40]
+s.values  # array([10, 20, 30, 40, 50])
+s.dtype   # dtype('int64')
+s.dtypes  # dtype('int64')
+s.shape   # (5,)
+s.size    # 5 
+s.mean()  # 30.0
+s.sum()   # 150
+s.min()   # 10
+s.max()   # 50
+s.unique()  # [10 20 30 40 50] (valores únicos)
+s.nunique() # [5 (número de valores únicos)
+```
+
+```python
+s = pd.Series([122, 320, 40, 250])
+
+s.sort_index() # ordena por índice
+# 0    122
+# 1    320
+# 2     40
+# 3    250
+
+s.sort_values() # ordena por valores
+# 2    40
+# 0    122
+# 3    250
+# 1    320
+
+s.isnull()  # verifica si hay valores faltantes (NaN)
+# 0    False
+# 1    False
+# 2    False
+# 3    False
+# 4    False
+
+s.notnull()  # verifica si no hay valores faltantes (NaN)
+# 0    True
+# 1    True
+# 2    True
+# 3    True
+# 4    True
+
+s.apply(lambda x: x ** 2)  # Aplica una función personalizada a cada elemento
+# 0     14884
+# 1    102400
+# 2      1600
+# 3     62500
+```
+
+### DataFrames
+
+```python
+file_path = "ruta-archivo/archivo.csv"
+df = pd.read_csv(file_path)  # Lee el archivo CSV y lo convierte en un DataFrame
+
+df.shape       # Número de filas y columnas (dimensión del DataFrame)
+df.head()      # Primeras 5 filas del DataFrame
+df.tail()      # Últimas 5 filas del DataFrame
+df.info()      # Información sobre el DataFrame
+df.describe()  # Estadísticas descriptivas del DataFrame
+```
+
+```python
+songs = {
+    "title": ["Song 1", "Song 2", "Song 3"],
+    "artist": ["Artist 1", "Artist 2", "Artist 3"],
+    "year": [2020, 2021, 2022]
+}
+
+df = pd.DataFrame(songs) # Convierte el diccionario en un DataFrame
+```
+
+```python
+df.iloc[0,0]     # Accede al valor de la fila 0 y columna 0 ('Song 1')
+df.iloc[1,0]     # Accede al valor de la fila 1 y columna 0 ('Song 2')
+df.iloc[0,:]     # Accede a la fila 0 ('Song 1', 'Artist 1', 2020)
+df.iloc[:,0]     # Accede a la columna 0 ('Song 1', 'Song 2', 'Song 3')
+df.iloc[0:2,0:2] # Accede a las filas 0 y 1 y a las columnas 0 y 1
+
+df.loc[0, "title"]  # Accede al valor de la fila 0 y columna 'title' ('Song 1')
+df.loc[1, "artist"] # Accede al valor de la fila 1 y columna 'artist' ('Artist 2')
+```
+
+```python
+df[['title', 'artist']] # Selecciona columnas específicas
+df[1:3]                 # Selecciona filas específicas
+df['year'].unique()     # Elementos únicos en la columna
+df[df['year'] > 2021]   # Filtrado condicional
+```
+
+```python
+# Guarda el DataFrame en un archivo CSV
+df.to_csv("ruta-archivo/archivo.csv", index=False)
+
+# Guarda el DataFrame en un archivo Excel
+df.to_excel("ruta-archivo/archivo.xlsx", index=False)
+```
+
 <a name="matplotlib"></a>
 
-### `matplotlib`
+## `matplotlib`
 
 [Matplotlib](https://matplotlib.org/) es una biblioteca para visualización de datos en Python.
 
@@ -2961,7 +3131,7 @@ import matplotlib.pyplot as plt
 
 <a name="seaborn"></a>
 
-### `seaborn`
+## `seaborn`
 
 [Seaborn](https://seaborn.pydata.org/) es una biblioteca para visualización de datos en Python.
 
@@ -2975,7 +3145,7 @@ import seaborn as sns
 
 <a name="beatifulsoup4"></a>
 
-### `beautifulsoup4`
+## `beautifulsoup4`
 
 [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/) es una biblioteca para analizar HTML y XML.
 
@@ -2991,7 +3161,7 @@ soup = BeautifulSoup(html_content, 'html.parser')
 
 <a name="selenium"></a>
 
-### `selenium`
+## `selenium`
 
 [Selenium](https://www.selenium.dev/) es una biblioteca para automatización de navegadores.
 
@@ -3008,7 +3178,7 @@ driver.get("https://www.google.com")
 
 <a name="scipy"></a>
 
-### `scipy`
+## `scipy`
 
 [SciPy](https://scipy.org/) es una biblioteca para cálculos científicos en Python.
 
@@ -3024,7 +3194,7 @@ scipy.stats.norm.pdf(0) # Devuelve la densidad de probabilidad de la distribuci�
 
 <a name="scikit-learn"></a>
 
-### `scikit-learn`
+## `scikit-learn`
 
 [Scikit-learn](https://scikit-learn.org/) es una biblioteca para aprendizaje automático en Python.
 
@@ -3041,7 +3211,7 @@ model.fit(X, y)
 
 <a name="tensorflow"></a>
 
-### `tensorflow`
+## `tensorflow`
 
 [TensorFlow](https://www.tensorflow.org/) es una biblioteca para aprendizaje automático en Python.
 
@@ -3059,7 +3229,7 @@ model = tf.keras.models.Sequential([
 
 <a name="keras"></a>
 
-### `keras`
+## `keras`
 
 [Keras](https://keras.io/) es una biblioteca para aprendizaje automático en Python.
 
