@@ -767,6 +767,65 @@ finally:
   # código que siempre se ejecuta
 ```
 
+### Excepciones comunes
+
+```python
+print(10 / 0)  # ZeroDivisionError
+```
+
+```python
+print(a + 5)  # NameError: name 'a' is not defined (si 'a' no se ha definido previamente)
+```
+
+```python
+print(int("abc"))  # ValueError
+```
+
+```python
+with open("nonexistent_file.txt", "r") as file:
+    content = file.read()  # FileNotFoundError
+```
+
+```python
+mi_lista = [1,2,3]
+mi_lista[1]  # No IndexError
+mi_lista[5]  # IndexError
+```
+
+```python
+my_dict = {'nombre': 'Rocío', 'age': 30}
+value = my_dict.get('apellido') # No KeyError, usando el método .get()
+missing = my_dict['apellido']   # KeyError
+```
+
+```python
+print("hello" + 5)  # TypeError
+```
+
+```python
+text = "ejemplo"
+length = len(text)            # No AttributeError
+missing = text.some_method()  # AttributeError (si no posee ese atributo o método)
+```
+
+```python
+import modulo_no_existente  # ImportError
+```
+
+**Ejemplo de manejo de la excepción:**
+
+```python
+try:
+    result = 10 / 0
+except ZeroDivisionError:
+    print("Error: No se puede dividir entre cero")
+
+# Esta línea se ejecutará independientemente de si ocurrió una excepción
+print("fuera del bloque try y except")
+```
+
+> _Hay muchas más excepciones en Python (`AssertionError`, `MemoryError`, `OverflowError`, `FloatingPointError`, `OSError`, `ModuleNotFoundError`, `StopIteration`, `KeyboardInterrupt`, `SystemExit`, `IndentationError`...)_
+
 ### `raise`
 
 Lanza una excepción manualmente.
