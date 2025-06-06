@@ -2185,8 +2185,8 @@ archivo.writelines(listado_texto) # pasar listado_texto = archivo.readlines()
 ```python
 # Modo lectura
 archivo = open("directorio/archivo.txt", "r")
-texto = archivo.read()
-texto = archivo.readlines()  # Devuelve una lista de líneas
+texto = archivo.read()       # lee todo el contenido del archivo como una cadena
+texto = archivo.readlines()  # devuelve una lista de líneas
 ```
 
 #### **Modos**
@@ -2231,8 +2231,9 @@ with open("ruta-archivo/archivo.txt", "r", encoding="utf-8") as f:
 
 # Leer líneas como lista
 with open("ruta-archivo/archivo.txt", "r", encoding="utf-8") as f:
-    lineas = f.readlines()  # Lee todas las líneas
-    line = f.readline(10)   # Lee los primeros 10 caracteres de la primera línea
+    lineas = f.readlines()    # Lee todas las líneas
+    next_line = f.reafline()  # Lee la siguiente línea como una cadena
+    line = f.readline(10)     # Lee los primeros 10 caracteres de la primera línea
 
 # Escribir (sobrescribe)
 with open("ruta-archivo/archivo.txt", "w") as f:
@@ -2266,7 +2267,7 @@ for line in read_file(nombre_archivo):
 ```python
 with open('ruta-archivo/nombre_archivo.txt', 'r') as source_file:
     with open('ruta-archivo/nombre_archivo_copia.txt', 'w') as destination_file:
-        for line in source_file:
+        for line in source_file:          # Procesa cada línea
             destination_file.write(line)  # Copia línea a línea
 ```
 
@@ -2501,6 +2502,18 @@ with open('carpeta/archivo.csv') as r, open('carpeta/archivo_temporal.csv', 'w')
             writer.writerow(linea)
     os.remove('carpeta/archivo.csv')
     os.rename('carpeta/archivo_temp.csv', 'carpeta/archivo.csv')
+```
+
+```python
+# Escribe el DataFrame en un archivo CSV
+df.to_csv("output.csv", index=False)
+```
+
+## `excel`
+
+```python
+# Lee datos de un archivo de Excel y crea un DataFrame
+df = pd.read_excel("nombre_archivo.xlsx")
 ```
 
 <a name="json"></a>
@@ -2992,6 +3005,59 @@ pip install numpy
 import numpy as np
 ```
 
+```python
+a = np.array([0,1,2,3,4])
+
+type(a)   # numpy.ndarray
+a.dtype   # dtype('int64')
+a.size    # 5
+a.ndim    # 1
+a.shape   # (5,)
+```
+
+```python
+b = np.array([20,1,2,3,4])  # array 1D
+
+# Indexación
+b[0] = 100   # [100 1 2 3 4]
+c = b[1:4]   # Asignar valores de un array a otro array
+```
+
+```python
+# Suma y resta de vectores
+u = np.array([20,1,32,13,24])
+v = np.array([10,12,10,8,14])
+
+u + v   # [30 13 42 21 38]
+u - v   # [10 -11 22 5 10]
+u * v   # [200 12 320 104 336]
+u / v   # [2. 0.08333333 3.2 1.625 1.71428571]
+
+# Operaciones con un escalar
+u + 10  # [30 11 42 23 34]
+u * 2   # [40 2 64 26 48]
+
+# Funciones
+u.mean()             # 18.0
+u.sum()              # 90
+u.max()              # 32
+u.min()              # 1
+np.pi                # 3.141592653589793
+np.linspace(-2,2,5)  # [-2. -1.  0.  1.  2.]
+
+# Dot product (producto punto)
+np.dot(u,v)  # 972 -> 20 * 10 + 1 * 12 + 32 * 10 + 13 * 8 + 24 * 14
+```
+
+````python
+A = np.array([[11, 12, 13], [21, 22, 23], [31, 32, 33]]) # array 2D
+
+A[1,2]    # 23             (acceder al elemento de la 2ª fila, 3ª columna)
+A[1][2]   # 23             (acceder al elemento de la 2ª fila, 3ª columna)
+A[0][0:2] # array([11,12]) (elementos de la 1ª fila y 1ª y 2ª columnas)
+A[0:2][2] # array([13,23]) (elementos de la 1ª y 2ª filas y 3ª columna)
+
+
 <a name="pandas"></a>
 
 ## `pandas`
@@ -3000,7 +3066,7 @@ import numpy as np
 
 ```bash
 pip install pandas
-```
+````
 
 ```python
 import pandas as pd
@@ -3021,7 +3087,7 @@ s.values  # array([10, 20, 30, 40, 50])
 s.dtype   # dtype('int64')
 s.dtypes  # dtype('int64')
 s.shape   # (5,)
-s.size    # 5 
+s.size    # 5
 s.mean()  # 30.0
 s.sum()   # 150
 s.min()   # 10
@@ -3072,11 +3138,12 @@ s.apply(lambda x: x ** 2)  # Aplica una función personalizada a cada elemento
 file_path = "ruta-archivo/archivo.csv"
 df = pd.read_csv(file_path)  # Lee el archivo CSV y lo convierte en un DataFrame
 
-df.shape       # Número de filas y columnas (dimensión del DataFrame)
-df.head()      # Primeras 5 filas del DataFrame
-df.tail()      # Últimas 5 filas del DataFrame
-df.info()      # Información sobre el DataFrame
-df.describe()  # Estadísticas descriptivas del DataFrame
+df.shape        # Número de filas y columnas (dimensión del DataFrame)
+df.head()       # Primeras 5 filas del DataFrame
+df.tail()       # Últimas 5 filas del DataFrame
+df.info()       # Información sobre el DataFrame
+df.describe()   # Estadísticas descriptivas del DataFrame
+df.duplicated() # Valores o registros duplicados o repetitivos
 ```
 
 ```python
@@ -3105,6 +3172,21 @@ df[['title', 'artist']] # Selecciona columnas específicas
 df[1:3]                 # Selecciona filas específicas
 df['year'].unique()     # Elementos únicos en la columna
 df[df['year'] > 2021]   # Filtrado condicional
+```
+
+```python
+# Eliminar filas o columnas del DataFrame
+df.drop(["col1", "col2"], axis=1, inplace=True) # Elimina columnas
+df.drop(index=[row1, row2], axis=0, inplace=True) # Elimina filas
+df.dropna(axis=0, inplace=True) # Elimina filas con valores NaN faltantes
+```
+
+```python
+# Combinar dos DataFrames basándose en múltiples columnas comunes
+merged_df = pd.merge(df1, df2, on=["col1", "col2"])
+
+# Reemplaza valores específicos en una columnas por nuevos valores
+df["nombre_columna"].replace(old_value, new_value, inplace=True)
 ```
 
 ```python
