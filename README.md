@@ -53,9 +53,9 @@
 **I/O y archivos:**
 
 - [`Lectura y escritura de archivos`](#lectura-escritura-archivos) | [`Rutas y directorios`](#rutas-y-directorios)
-- Formatos: [`open`](#open) | [`csv`](#csv) | [`json`](#json) | [`html`/`xml`](#html-xml)
+- Formatos: [`open`](#open) | [`csv`](#csv) | [`json`](#json) | [`yaml`](#yaml) | [`html`/`xml`](#html-xml)
 - Binario: [`zipfile`](#zipfile) | [`tarfile`](#tarfile)
-- Sistema: [`pathlib`](#pathlib) | [`os, sys`](#files) | [`subprocess`](#subprocess)
+- Sistema: [`pathlib`](#pathlib) | [`os, sys`](#files) | [`glob`](#glob) | [`subprocess`](#subprocess)
 
 **Bases de datos:** [`sqlite3`](#sqlite3) | [`MySQL`/`PostgreSQL`](#mysql-postgresql) | [`ORM`](#orm)
 
@@ -2541,6 +2541,22 @@ json.loads('"\\"foo\\bar"') # '"foo\x08ar'
 
 🔗 Más información: [`json` - Docs Python](https://docs.python.org/es/3/library/json.html)
 
+<a name="yaml"></a>
+
+## `yaml`
+
+```python
+import yaml
+
+# Codificación
+yaml.dump({"a": 1, "b": 2}) # "a: 1\nb: 2\n"
+
+# Decodificación
+yaml.load("a: 1\nb: 2\n") # {"a": 1, "b": 2}
+```
+
+🔗 Más información: [`yaml` - Docs Python](https://pyyaml.org/wiki/PyYAMLDocumentation)
+
 <a name="html-xml"></a>
 
 ## `html / xml`
@@ -2583,6 +2599,8 @@ with ZipFile("archivos/comprimidos") as zip:
 
 ### `os` _(Operating System)_ - Interacción con el sistema operativo
 
+Para acceder a archivos del sistema.
+
 ```python
 import os
 
@@ -2591,6 +2609,27 @@ os.getenv("HOME")     # Obtener variable de entorno
 os.environ["X"] = "1" # Establecer variable
 os.system("ls -la")   # Ejecuta comando del sistema
 ```
+
+- Si quieres leer o escribir un archivo mira [`open()`](#lectura-y-escritura-con-open).
+- Si quieres manipular rutas, mira el módulo [`os.path`](https://docs.python.org/es/3.13/library/os.path.html#module-os.path) _(a continuación)_.
+
+### `os.path`
+
+Para acceder a rutas de archivos.
+
+```python
+import os
+
+os.path.join("carpeta", "archivo.txt")  # "carpeta/archivo.txt"
+os.path.split("carpeta/archivo.txt")    # ("carpeta", "archivo.txt")
+os.path.dirname("carpeta/archivo.txt")  # "carpeta"
+os.path.basename("carpeta/archivo.txt") # "archivo.txt"
+os.path.isfile("carpeta/archivo.txt")   # True
+os.path.isdir("carpeta")                # True
+os.path.exists("carpeta/archivo.txt")   # True
+```
+
+> Aunque `os.path.join` es perfectamente válido y portátil, desde Python 3.4 se introdujo el módulo [`pathlib`](#pathlib) que ofrece una interfaz orientada a objetos para manejar rutas de ficheros.
 
 ### `sys` _(System)_ - Interacción con el intérprete de Python
 
@@ -2602,6 +2641,21 @@ sys.exit()   # Finaliza el programa (salir del programa)
 sys.path     # Rutas de búsqueda de módulos
 sys.version  # Versión de Python
 ```
+
+<a name="glob"></a>
+
+## `glob`
+
+Permite buscar archivos en un directorio según patrones con comodines.
+
+```python
+import glob
+
+# Buscar archivos
+archivos = glob.glob("*.py")  # Lista con todos los archivos .py en directorio actual
+```
+
+🔗 Más información: [`glob` - Docs Python](https://docs.python.org/es/3/library/glob.html)
 
 <a name="subprocess"></a>
 
@@ -2763,7 +2817,14 @@ assert(suma(3.0, 2.0)) # Lanza un AssertionError
 ```python
 import logging
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(
+    filename="mi_app.log",  # Nombre del archivo de log
+    level=logging.INFO,  # Nivel de logging (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+    format="%(asctime)s - %(levelname)s - %(message)s",  # Formato de mensaje
+    datefmt="%Y-%m-%d %H:%M:%S"  # Formato de fecha
+)
+
+# Tipos de mensajes
 logging.debug("Mensaje de depuración")
 logging.info("Mensaje informativo")
 logging.warning("Mensaje de advertencia")
