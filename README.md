@@ -48,7 +48,7 @@
 
 **Red y correo:** [`webbrowser`](#webbrowser) | [`smtplib`](#smtplib) | [`MIMEText`](#mime-text) | [`socket`](#socket) | [`requests`](#requests) | [`ftp`](#ftp)
 
-**Módulos, entornos y dependencias:** [`Módulos`](#modulos) | [`venv`](#env) | [`pip`/`requirements`](#pip) | [`pipenv`](#pipenv) | [`poetry`](#poetry)
+**Módulos, entornos y dependencias:** [`Módulos`](#modulos) | [`venv`](#env) | [`pip`/`requirements`](#pip) | [`pipenv`](#pipenv) | [`setuptools`](#setuptools) | [`poetry`](#poetry)
 
 **I/O y archivos:**
 
@@ -2142,6 +2142,48 @@ Saber dónde está almacenado el entorno virtual:
 pipenv --venv
 ```
 
+<a name="setuptools"></a>
+
+## `setuptools`
+
+[`setuptools`](https://pypi.org/project/setuptools/) facilita la creación de paquetes en Python y la gestión de dependencias. Proporciona todo lo necesario para distribuir nuestros propios módulos e incluso nos permite publicar paquetes en el respositorio público PyPI (Python Package Index).
+
+```bash
+pip install setuptools
+```
+
+Si tenemos esta estructura de archivos y directorios:
+
+```
+| requeriments.txt  # Fichero que contiene las dependencias del paquete
+| setup.py          # Fichero que contiene toda la información de instalación
++ mi_paquete/       # Directorio del paquete al mismo nivel que setup.py
+   | __init__.py    # Fichero que indica que el directorio es un paquete
+   | modulo.py      # Módulo o script que contiene definiciones
+```
+
+```python
+from setuptools import setup, find_packages
+
+setup(
+    name="mi_paquete",                               # Nombre del paquete
+    version="0.1",                                   # Versión del paquete
+    description="Descripción de mi paquete",         # Descripción del paquete
+    author="Tu Nombre",                              # Autor del paquete
+    author_email="tu_email@example.com",             # Correo electrónico del autor
+    license="MIT",                                   # Licencia del paquete: MIT, GPL, GPL 2.0, etc.
+    url="https://github.com/tu_usuario/mi_paquete",  # URL del repositorio del paquete
+    packages=find_packages(),
+    install_requires=[i.strip() for i in open("requirements.txt").readlines()],  # Dependencias del paquete
+    classifiers=[                                      # Clasificadores del paquete
+        "Development Status :: 3 - Alpha",             # Estado de desarrollo
+        "Intended Audience :: Developers",             # Público objetivo
+        "License :: OSI Approved :: MIT License",      # Licencia del paquete
+        "Programming Language :: Python :: 3.12.8",    # Lenguaje de programación y versión
+    ],
+)
+```
+
 <a name="poetry"></a>
 
 ## `poetry`
@@ -3297,9 +3339,24 @@ pip install beautifulsoup4
 ```
 
 ```python
+import requests
 from bs4 import BeautifulSoup
 
+url = "https://www.ejemplo.com"
+response = requests.get(url)
+html_content = response.text
+
+# Crear un objeto BeautifulSoup
 soup = BeautifulSoup(html_content, 'html.parser')
+print(html_content[:500]) # Imprime los primeros 500 caracteres del HTML
+```
+
+```python
+# Encuentra todos los enlaces en el HTML
+links = soup.find_all('a')
+for link in links:
+    print(link.text)        # Imprime el texto del enlace
+    print(link.get('href')) # Imprime el valor del atributo href
 ```
 
 <a name="selenium"></a>
