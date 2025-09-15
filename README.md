@@ -48,7 +48,7 @@
 
 **Red y correo:** [`webbrowser`](#webbrowser) | [`smtplib`](#smtplib) | [`MIMEText`](#mime-text) | [`socket`](#socket) | [`requests`](#requests) | [`ftp`](#ftp)
 
-**Módulos, entornos y dependencias:** [`Módulos`](#modulos) | [`venv`](#env) | [`pip`/`requirements`](#pip) | [`pipenv`](#pipenv) | [`setuptools`](#setuptools) | [`poetry`](#poetry)
+**ithu:** [`Módulos`](#modulos) | [`venv`](#env) | [`pip`/`requirements`](#pip) | [`pipenv`](#pipenv) | [`setuptools`](#setuptools) | [`poetry`](#poetry)
 
 **I/O y archivos:**
 
@@ -321,20 +321,20 @@ print(last)  # 10
 ```python
 # Matrix
 matrix = [[1,2,3], [4,5,6], [7,8,9]]
-matrix[2][0] # 7 --> Grab first first of the third item in the matrix object
+matrix[2][0] # 7 --> primer elemento del tercer item en el objeto matriz
 ```
 
 ```python
-# Looping through a matrix by rows:
+# Iterando a través de una matriz por filas:
 mx = [[1,2,3],[4,5,6]]
 for row in range(len(mx)):
 	for col in range(len(mx[0])):
 		print(mx[row][col]) # 1 2 3 4 5 6
-# Transform into a list:
+# Transformar en una lista:
 [mx[row][col] for row in range(len(mx)) for col in range(len(mx[0]))] # [1,2,3,4,5,6]
 
-# Combine columns with zip and *:
-[x for x in zip(*mx)] # [(1, 3), (2, 4)]
+# Combinar columnas con zip y *:
+[x for x in zip(*mx)] # [(1, 4), (2, 5), (3, 6)]
 ```
 
 ```python
@@ -342,16 +342,18 @@ for row in range(len(mx)):
 list_of_chars = list('Helloooo')  # ['H', 'e', 'l', 'l', 'o', 'o', 'o', 'o']
 sum_of_elements = sum([1,2,3,4,5])  # 15
 element_sum = [sum(pair) for pair in zip([1,2,3],[4,5,6])]  # [5, 7, 9]
+
 sorted_by_second = sorted(['hi','you','man'], key=lambda el: el[1])  # ['man', 'hi', 'you']
 sorted_by_key = sorted([
                        {'name': 'Elena', 'age': 30},
                        {'name': 'Ana', 'age': 18},
                        {'name': 'Ángel', 'age': 55}],
                        key=lambda el: (el['name']))
+
 # [{'name': 'Ana', 'age': 18}, {'name': 'Elena', 'age': 30}, {'name': 'Ángel', 'age': 55}]
 ```
 
-ℹ️ **Consultar [_'List Comprehension'_](#comprehensions) de la sección _'Estructuras funcionales'_**
+ℹ️ Consultar **[_'List Comprehension'_](#comprehensions)** de la sección _'Estructuras funcionales'_
 
 ```python
 # Leer linea de un archivo en una lista
@@ -359,7 +361,7 @@ with open("myfile.txt") as f:
   lines = [line.strip() for line in f]
 ```
 
-ℹ️ **Consultar [_'Lectura y escritura de archivos'_](#lectura-escritura-archivos) de la sección _'Sistema de archivos'_**
+ℹ️ Consultar **[_'Lectura y escritura de archivos'_](#lectura-escritura-archivos)** de la sección _'Sistema de archivos'_
 
 <a name="tuples"></a>
 
