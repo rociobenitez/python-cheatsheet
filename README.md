@@ -353,7 +353,7 @@ sorted_by_key = sorted([
 # [{'name': 'Ana', 'age': 18}, {'name': 'Elena', 'age': 30}, {'name': 'Ángel', 'age': 55}]
 ```
 
-ℹ️ Consultar **[_'List Comprehension'_](#comprehensions)** de la sección _'Estructuras funcionales'_
+ℹ️ Consultar **[_List Comprehension_](#comprehensions)** de la sección _Estructuras funcionales_
 
 ```python
 # Leer linea de un archivo en una lista
@@ -361,7 +361,7 @@ with open("myfile.txt") as f:
   lines = [line.strip() for line in f]
 ```
 
-ℹ️ Consultar **[_'Lectura y escritura de archivos'_](#lectura-escritura-archivos)** de la sección _'Sistema de archivos'_
+ℹ️ Consultar **[_Lectura y escritura de archivos_](#lectura-escritura-archivos)** de la sección _Sistema de archivos_
 
 <a name="tuples"></a>
 
@@ -1961,6 +1961,46 @@ funcion1() # "Funcion 1"
 funcion2() # "Funcion 2"
 ```
 
+#### **Import dinámico de paquetes:**
+
+```python
+# archivo-inyeccion-dependencias.py
+from pathlib import Path
+import db
+import api
+import graphql
+
+path = Path()
+paths = [p for p in path.iterdir() if p.is_dir()]
+
+dependencias = {
+    "db": db,
+    "api": api,
+    "graphql": graphsql
+}
+
+def load(p):
+    paquete = __import__(str(p).replace("/", "."))
+    try:
+        paquete.init(**dependecias)
+    except:
+        print("El paquete no tiene función init")
+
+list(map(load,paths))
+```
+
+```python
+# modulo1/__init__.py
+def init(db, api, **_):
+    print(f"{db},{api}")
+```
+
+```python
+# modulo2/__init__.py
+def init(graphql, **_):
+    print(f"{graphql}")
+```
+
 ### Subpaquetes
 
 ```bash
@@ -2206,94 +2246,76 @@ poetry add nombre_paquete
 
 ## Lectura y escritura de archivos
 
-Para leer y escribir archivo puedes usar [`with`y `open`](#lectura-escritura-open") o [`Path`](#lectura-escritura-path")
+Para leer y escribir archivo puedes usar [`with` y `open`](#open") o [`Path`](#lpath")
+
+<a name="open"></a>
 
 ### Lectura y escritura con `open`
 
 ```python
-from io import open
+# Lectura completa (texto)
+with open("ruta-archivo/archivo.txt", "r", encoding="utf-8") as f:
+    contenido = f.read()      # Lee todo el contenido como una cadena
 
-texto = "Hola mundo!"
-archivo = open("directorio/archivo.txt", mode="w", encoding=None)
-... # write, read, readlines...
-archivo.close() # Es necesario cerrar el archivo
+# Lectura por líneas
+with open("ruta-archivo/archivo.txt", "r", encoding="utf-8") as f:
+    lineas = f.readlines()    # Lista de líneas (incluye '\n')
+    next_line = f.readline()  # Lee la siguiente línea como una cadena
+    line = f.readline(10)     # Lee hasta 10 caracteres
+
+# Escribir (sobrescribe)
+with open("ruta-archivo/archivo.txt", "w", encoding="utf-8") as f:
+    f.write("Hola mundo\n")
+
+# Añadir (append)
+with open("ruta-archivo/archivo.txt", "a", encoding="utf-8") as f:
+    f.write("\nNueva línea")
+
+# Escribir múltiples líneas (no añade '\n' automáticamente)
+lineas = ["Línea 1\n", "Línea 2\n"]
+with open("ruta-archivo/archivo.txt", "w", encoding="utf-8") as f:
+    f.writelines(lineas)
+
+# Posicionamiento
+with open("ruta-archivo/archivo.txt", "r+", encoding="utf-8") as f:
+    f.seek(0)          # Se desplaza al inicio del archivo
+    f.write("Inicio")  # Sobrescribe desde el inicio
+    f.seek(0, 2)       # Se desplaza al final del archivo
+    f.write("Fin")     # Añade al final
+    pos = f.tell()     # Obtener posición actual
 ```
 
-```python
-# Modo escritura
-archivo = open("directorio/archivo.txt", "w") # Si el archivo no existe, lo crea
-archivo.write(texto)
-archivo.writelines(listado_texto) # pasar listado_texto = archivo.readlines()
-```
+- El uso de `with` asegura que el archivo se **cierre automáticamente** _(mejor práctica)_.
 
-```python
-# Modo lectura
-archivo = open("directorio/archivo.txt", "r")
-texto = archivo.read()       # lee todo el contenido del archivo como una cadena
-texto = archivo.readlines()  # devuelve una lista de líneas
-```
-
-#### **Modos**
+#### **Modos básicos**
 
 - `r` - Lectura (por defecto)
 - `w` - Escritura. Si el archivo no existe, lo crea
 - `x` - Escritura o falla si el archivo ya existe
 - `a` - Agregar, añadir
-- `w+` - Lectura y escritura
-- `r+` - Lectura y escritura desde el principio
-- `a+` - Lectura y escritura desde el final. Si el archivo no existe, lo crea
-- `t` - Modo texto
+- Añade `+` para lectura y escritura
+  - `w+` - Lectura y escritura desde el principio
+  - `r+` - Lectura y escritura desde el principio
+  - `a+` - Lectura y escritura desde el final. Si el archivo no existe, lo crea
+- Sufijo `t` es modo texto (por defecto)
   - `rt` - Modo lectura de texto
   - `wt` - Modo escritura de texto
   - `at` - Modo anexado de texto
-- `b` - Modo binario
+- Sufijo `b` es modo binario
+
   - `rb` - Modo lectura binaria
   - `wb` - Modo escritura binaria
   - `ab` - Modo anexado binario
 
-```python
-archivo.seek(0) # Se desplaza al inicio del archivo
-```
+#### **Atributos útiles**
 
 ```python
-archivo.mode      # Modo de apertura del archivo
-archivo.name      # Nombre del archivo
-archivo.closed    # True si el archivo está cerrado
-archivo.encoding  # Codificación del archivo
-archivo.newlines  # Número de nuevas líneas
-archivo.softspace # True si el archivo está cerrado
+file.mode      # Modo de apertura del archivo
+file.name      # Nombre del archivo
+file.closed    # True si el archivo está cerrado
+file.encoding  # Codificación del archivo
+file.newlines  # Número de nuevas líneas
 ```
-
-<a name="open"></a>
-
-### Lectura y escritura con `with`
-
-```python
-# Leer archivo completo
-with open("ruta-archivo/archivo.txt", "r", encoding="utf-8") as f:
-    contenido = f.read()
-
-# Leer líneas como lista
-with open("ruta-archivo/archivo.txt", "r", encoding="utf-8") as f:
-    lineas = f.readlines()    # Lee todas las líneas
-    next_line = f.reafline()  # Lee la siguiente línea como una cadena
-    line = f.readline(10)     # Lee los primeros 10 caracteres de la primera línea
-
-# Escribir (sobrescribe)
-with open("ruta-archivo/archivo.txt", "w") as f:
-    f.write("Hola mundo")
-
-# Añadir (append)
-with open("ruta-archivo/archivo.txt", "a") as f:
-    f.write("\nNueva línea")
-
-# Escritura de múltiples líneas
-with open("ruta-archivo/archivo.txt", "w") as f:
-    f.writelines(["Línea 1\n", "Línea 2\n"])
-```
-
-- El uso de `with` asegura que el archivo se **cierre automáticamente** _(mejor práctica)_.
-- Usa `"rb"` / `"wb"` para archivos binarios.
 
 #### **Leer texto de un archivo**
 
@@ -2337,169 +2359,116 @@ with open('Example2.txt', 'a') as file1:
     file1.write(new_data + "\n")  # Línea agregada al final del archivo
 ```
 
+<a name="path"></a>
+
 ### Lectura y escritura con `Path`
 
 ```python
 from pathlib import Path
 
-archivo = Path("archivo.txt")
+file = Path("archivo.txt")
 
-archivo.read_text()                 # Leer archivo completo
-archivo.read_text().split("\n")     # Leer archivo y dividir el string
-archivo.read_text(encoding="utf-8") # Leer archivo con codificación
-archivo.write_text("Hola mundo")    # Escribir archivo
+file.read_text()                 # Leer archivo completo
+file.read_text().split("\n")     # Leer archivo y dividir el string
+file.read_text(encoding="utf-8") # Leer archivo con codificación
+file.write_text("Hola mundo\n", encoding="utf-8")  # Escribir archivo
 ```
 
 ```python
-texto = archivo.read_text("utf-8").split("\n") # Leer con codificación y dividir
-text.insert(0, "Hola mundo!")                  # Añadir texto al inicio
-archivo.write_text("\n".join(texto), "utf-8")  # Escribir sobre el archivo (manipular string)
+# Leer / escribir texto
+text = file.read_text(encoding="utf-8").split("\n") # Leer con codificación y dividir
+text.insert(0, "Hola mundo!")                       # Añadir texto al inicio
+file.write_text("\n".join(text), encoding="utf-8")  # Escribir sobre el archivo (manipular string)
+
+# Leer como bytes / escribir bytes
+data = file.read_bytes()          # Leer como bytes
+file.write_bytes(b"\x00\x01")   # Escribir bytes
+
+# Abrir con Path.open (equivalente a open)
+with file.open("r", encoding="utf-8") as f:
+    content = f.read()
+    f.write("Otra línea\n")
 ```
 
-_`Path` se explica a continuación._
-
-> 🔗 Para el manejo de **archivo CSV y JSON**, puedes consultar las **secciones [_`CSV`_](#csv) y [_`JSON`_](#json).**
-
-<a name="rutas-y-directorios"></a>
-
-## Rutas y directorios
-
-### `pathlib`
-
-`pathlib` es más limpio, multiplataforma y expresivo. Reemplaza a `os.path` y parte de `os` para rutas.
-
-#### **Rutas:**
+#### **Operaciones de archivo y metadatos:**
 
 ```python
 from pathlib import Path
 
-ruta = Path("carpeta/archivo.txt")
+file = Path('archivos/archivo.txt')
 
-ruta.exists()      # True si existe
-ruta.is_file()     # True si es archivo
-ruta.is_dir()      # True si es carpeta
-ruta.parent        # Carpeta superior (directorio padre)
-ruta.name          # Nombre del archivo
-ruta.stem          # Nombre sin extensión
-ruta.suffix        # Extensión (.txt)
-ruta.absolute()    # Ruta absoluta
+file.exists()  # (bool) True si existe
+file.is_file() # (bool) True si es archivo
+file.is_dir()  # (bool) True si es carpeta
+file.rename("nuevo_nombre.txt")  # Renombra el archivo (falla si destino existe)
+file.replace("nuevo_nombre.txt") # Renombra sobreescribiendo destino si existe
+file.unlink(missing_ok=True)     # Eliminar archivo (sin error si no existe)
 
-# Crear carpeta
+# Muestra estadísticas; os.stat_result (tamaño, tiempos, permisos, etc.)
+st = file.stats()
+```
+
+#### **Rutas y utilidades:**
+
+```python
+from pathlib import Path
+
+p = Path("carpeta/archivo.txt")
+p.parent           # Path('carpeta')
+p.name             # 'archivo.txt'
+p.stem             # 'archivo'
+p.suffix           # '.txt'
+p.with_name("nuevo.txt")     # Path('carpeta/nuevo.txt')
+p.with_suffix(".md")         # Path('carpeta/archivo.md')
+p.with_stem("renombrado")    # Path('carpeta/renombrado.txt')
+
+# Absolutas / resolución
+p_abs = p.resolve()          # absoluta y normalizada (resuelve symlinks)
+cwd = Path.cwd()             # directorio de trabajo
+home = Path.home()           # home del usuario
+
+# Crear directorios
 Path("nueva_carpeta").mkdir(parents=True, exist_ok=True)
 
-# Leer contenido
-Path("archivo.txt").read_text(encoding="utf-8")
-
-# Escribir
-Path("archivo.txt").write_text("Texto nuevo")
+# Listar y filtrar
+carpeta = Path("carpeta")
+solo_archivos = [x for x in carpeta.iterdir() if x.is_file()]
+py_local = list(carpeta.glob("*.py"))       # no recursivo
+py_rec = list(carpeta.rglob("*.py"))        # recursivo
 ```
 
-```python
-# En Windows
-Path(r"C:\Users\Usuario\Desktop\archivo.txt") # 'r' -> raw string (evitar caracteres especiales)
-```
+- `Path(__file__).resolve().parent` → carpeta donde está este archivo Python
+  - Úsalo para construir rutas relativas al módulo/script.
+  - No existe **file** en el intérprete interactivo o en algunos entornos (p.ej. notebooks); en esos casos usa `Path.cwd()`.
+- `Path.cwd()` → _current working directory_ (desde donde se invoca el proceso)
+  - `Path.cwd().parent` te sube un nivel respecto al CWD, no respecto al archivo actual.
+  - Esto evita confusiones cuando ejecutas el script desde otra carpeta.
 
-```python
-p = ruta.with_name("nuevo_nombre.txt")
-print(p)  # 'carpeta/nuevo_nombre.txt'
-```
-
-```python
-p = ruta.with_suffix(".bat")
-print(p)  # 'carpeta/archivo.bat'
-```
-
-```python
-p = ruta.with_stem("nuevo_nombre")
-print(p)  # 'carpeta/nuevo_nombre.txt'
-```
-
-#### **Directorios:**
+**Ejemplos prácticos:**
 
 ```python
 from pathlib import Path
 
-path = Path("carpeta")
+# Ruta relativa al archivo actual (robusto para scripts y paquetes)
+BASE_DIR = Path(__file__).resolve().parent
+DATA_DIR = BASE_DIR / "data"
+DATA_DIR.mkdir(exist_ok=True)
 
-path.exists()                # True si existe
-path.mkdir()                 # Crear directorio
-path.rmdir()                 # Eliminar directorio (debe estar vacío)
-path.rename("nuevo-nombre")  # Renombrar directorio
+# Ruta relativa al directorio de trabajo (útil para CLIs)
+OUT_DIR = Path.cwd() / "out"
+OUT_DIR.mkdir(exist_ok=True)
 ```
 
-```python
-# Iterar sobre archivos en el directorio
-for file in path.iterdir():
-    print(file) # 'carpeta/archivo.txt'
-```
+> **Nota**: `Path.absolute()` existe, pero `Path.resolve()` es la recomendada para obtener una **ruta absoluta normalizada**. Usa `strict=True` si quieres que falle si el path no existe.
+
+#### **Patrones comunes de copia y anexado**
 
 ```python
-# Filtrar archivos
-archivos = [p for p in path.iterdir() if not p.is_dir()]
-print(archivos)  # [PosixPath('carpeta/archivo.txt'), PosixPath('carpeta/archivo2.txt')]
-```
-
-```python
-archivos = [p for p in path.glob("*.py")]     # No recursivo (solo en la carpeta)
-archivos = [p for p in path.glob("**/*.py")]  # Recursivo (subcarpetas)
-archivos = [p for p in path.rglob("*.py")]    # Recursivo (subcarpetas)
-print(archivos)  # [PosixPath('carpeta/archivo.py'), PosixPath('carpeta/archivo2.py')]
-
-archivos = [p for p in path.glob("01-*.py")]  # Patrón de nombre
-print(archivos)  # [PosixPath('carpeta/01-archivo.py')]
-```
-
-#### **Gestión de archivos:**
-
-```python
-from pathlib import Path
-
-archivo = Path('archivos/archivo.txt')
-
-archivo.exists() # True si existe
-archivo.rename() # Renombra el archivo
-archivo.unlink() # Eliminar archivo o enlace simbólico
-archivo.stats()  # Muestra estadísticas
-```
-
-#### **Import dinámico de paquetes:**
-
-```python
-# archivo-inyeccion-dependencias.py
-from pathlib import Path
-import db
-import api
-import graphql
-
-path = Path()
-paths = [p for p in path.iterdir() if p.is_dir()]
-
-dependencias = {
-    "db": db,
-    "api": api,
-    "graphql": graphsql
-}
-
-def load(p):
-    paquete = __import__(str(p).replace("/", "."))
-    try:
-        paquete.init(**dependecias)
-    except:
-        print("El paquete no tiene función init")
-
-list(map(load,paths))
-```
-
-```python
-# modulo1/__init__.py
-def init(db, api, **_):
-    print(f"{db},{api}")
-```
-
-```python
-# modulo2/__init__.py
-def init(graphql, **_):
-    print(f"{graphql}")
+# Copiar línea a línea
+with open("origen.txt", "r", encoding="utf-8") as src, \
+     open("destino.txt", "w", encoding="utf-8") as dst:
+    for linea in src:
+        dst.write(linea)
 ```
 
 <a name="csv"></a>
@@ -2509,43 +2478,28 @@ def init(graphql, **_):
 ```python
 import csv
 
-# Lectura
-with open('carpeta/archivo.csv', encoding='urf-8') as archivo: # Modo lectura por defecto
-    return csv.reader(archivo, delimiter=';')  # Este objeto se puede iterar
+# Lectura como filas (lista de listas)
+with open("carpeta/archivo.csv", mode="r", encoding="utf-8", newline="") as f:
+    reader = csv.reader(f, delimiter=";")
+    filas = list(reader)
 
-with open('carpeta/archivo.csv', encoding='urf-8') as archivo: # Modo lectura por defecto
-    reader = csv.reader(archivo, delimiter=';')
-    return list(reader)  # O pasarlo como una lista
-
-with open('carpeta/archivo.csv', encoding='urf-8') as archivo: # Modo lectura por defecto
-    reader = csv.reader(archivo, delimiter=';')
-    for linea in reader:
-        print(linea)  # Mostrar línea a línea
+# Lectura como dicts
+with open("carpeta/archivo.csv", "r", encoding="utf-8", newline="") as f:
+    reader = csv.DictReader(f, delimiter=";")
+    for row in reader:
+        print(row["columna"])
 ```
 
 ```python
-# Escritura
-def write_to_csv_file(nombre_archivo, rows)
-    with open(nombre_archivo, 'w', encoding='urf-8') as archivo:
-        writer = csv.writer(archivo, delimiter=';')
-        writer.writerow()
-        writer.writerows(rows)
-```
-
-```python
-import os
-
-# Actualizar CSV
-with open('carpeta/archivo.csv') as r, open('carpeta/archivo_temporal.csv', 'w') as w:
-    reader = csv.reader(r)
-    writer = csv.writer(w)
-    for linea in reader:
-        if linea[0] == "826": # supongamos que es el ID del usuario
-            writer.whiterow([826, 'Rocío', 'texto modificado'])
-        else:
-            writer.writerow(linea)
-    os.remove('carpeta/archivo.csv')
-    os.rename('carpeta/archivo_temp.csv', 'carpeta/archivo.csv')
+# Escritura como dicts
+rows = [
+    {"id": 1, "nombre": "Ana"},
+    {"id": 2, "nombre": "Luis"},
+]
+with open("carpeta/salida.csv", "w", encoding="utf-8", newline="") as f:
+    writer = csv.DictWriter(f, fieldnames=["id", "nombre"], delimiter=";")
+    writer.writeheader()
+    writer.writerows(rows)
 ```
 
 ```python
