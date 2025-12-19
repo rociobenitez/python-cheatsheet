@@ -48,7 +48,7 @@
 
 **Red y correo:** [`webbrowser`](#webbrowser) | [`smtplib`](#smtplib) | [`MIMEText`](#mime-text) | [`socket`](#socket) | [`requests`](#requests) | [`ftp`](#ftp)
 
-**ithu:** [`Módulos`](#modulos) | [`venv`](#env) | [`pip`/`requirements`](#pip) | [`pipenv`](#pipenv) | [`setuptools`](#setuptools) | [`poetry`](#poetry)
+**Entornos y Dependencias:** [`Módulos`](#modulos) | [`venv`](#env) | [`pip`/`requirements`](#pip) | [`pipenv`](#pipenv) | [`setuptools`](#setuptools) | [`poetry`](#poetry)
 
 **I/O y archivos:**
 
@@ -151,6 +151,32 @@ f"Mi nombre es {name} y tengo {age} años" # "Mi nombre es Rocío y tengo 30 añ
 frase = "{0:d} {1:s} actualmente son {2:.2f} dólares ($)"
 print(frase.format(20, "euros (€)", 20*1.12)) # "20 euros (€) actualmente son 22,42 dólares ($)"
 ```
+
+```python
+print("Hello\nWorld") # Salto de línea
+print("Hello\tWorld") # Tabulador
+print(r"Hello\nWorld") # Raw string - No interpreta caracteres especiales
+
+print("""Línea 1
+Línea 2
+Línea 3""") # String multilínea
+print('''Línea 1
+Línea 2
+Línea 3''') # String multilínea
+
+# Concatenar Strings
+print ("Hello" + " World") # Concatenación con +
+print("Mi nombre es", "Rocío") # Concatenación con ,
+
+print("Mi nombres es ", end="") # end="" evita el salto de línea
+print("Rocío")
+
+# sep="-" cambia el separador por defecto (espacio en blanco) por otro carácter
+print("Mi", "nombre", "es", "Rocío", sep="-") # Mi-nombre-es-Rocío
+print("Mi nombres es", "Rocío", sep="-") # Mi nombres es-Rocío
+```
+
+> Los argumentos de palabras clave `sep` y `end` solo están disponibles en la función `print()`. Deben pasarse **después** de todos los argumentos posicionales.
 
 ```python
 # Funciones básicas
@@ -1015,6 +1041,14 @@ head, *body, tail = [1,2,3,4,5]
 
 `head` toma el **primer** elemento de la lista, `tail` toma el **último** elemento de la lista y `body` toma el resto de elementos de la lista (todo lo que queda en medio).
 
+## Indicaciones de tipo (Type Hints)
+
+```python
+def function_name(parametro1: int, parametro2: str) -> bool:
+    # code to execute
+    return True
+```
+
 <a name="lambda"></a>
 
 ## Lambda
@@ -1150,6 +1184,18 @@ def say_bye():
 
 say_hello() # "Hello!"
 say_bye()   # "Bye!"
+```
+
+## Generadores
+
+Los **generadores** son una forma especial de crear iteradores en Python. Utilizan la palabra clave `yield` para devolver valores uno a uno, en lugar de devolver todos los valores a la vez como lo haría una lista.
+
+```python
+def count_up_to(n):
+    count = 1
+    while count <= n:
+        yield count
+        count += 1
 ```
 
 <a name="scope"></a>
@@ -1910,11 +1956,26 @@ ftp.retrlines("LIST")
 
 ```python
 import <nombre_modulo>
-import <nombre_modulo> as m
+import <nombre_modulo> as m  # alias
+import <nombre_modulo>, <nombre_modulo>
 from <nombre_modulo> import <nombre_funcion>
 from <nombre_modulo> import <nombre_funcion>, <nombre_funcion>
-from <nombre_modulo> import <nombre_funcion> as m_function
-from <nombre_modulo> import *   # no recomendado
+from <nombre_modulo> import <nombre_funcion> as m_function  # alias
+from <nombre_modulo> import *  # no recomendado
+```
+
+Si un módulo se importa como `import modulo`, se debe usar el prefijo `modulo.` para acceder a sus funciones y variables.
+
+```python
+import math
+math.sqrt(16)  # 4.0
+```
+
+Si un módulo se importa como `from modulo import funcion`, se puede usar la función directamente sin el prefijo.
+
+```python
+from math import sqrt
+sqrt(16)  # 4.0
 ```
 
 ### Módulos vs Paquetes
