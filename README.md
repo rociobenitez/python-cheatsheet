@@ -48,7 +48,7 @@
 
 **Red y correo:** [`webbrowser`](#webbrowser) | [`smtplib`](#smtplib) | [`MIMEText`](#mime-text) | [`socket`](#socket) | [`requests`](#requests) | [`ftp`](#ftp)
 
-**Entornos y Dependencias:** [`Módulos`](#modulos) | [`venv`](#env) | [`pip`/`requirements`](#pip) | [`pipenv`](#pipenv) | [`setuptools`](#setuptools) | [`poetry`](#poetry)
+**Entornos y Dependencias:** [`Módulos`](#modulos) | [`venv`](#env) | [`pip`/`requirements`](#pip) | [`pipenv`](#pipenv) | [`platform`](#platform) | [`setuptools`](#setuptools) | [`poetry`](#poetry)
 
 **I/O y archivos:**
 
@@ -1978,6 +1978,8 @@ from math import sqrt
 sqrt(16)  # 4.0
 ```
 
+> Todos los módulos estándar de Python [aquí](https://docs.python.org/3/py-modindex.html).
+
 ### Módulos vs Paquetes
 
 - Un **módulo** es un **archivo** `.py`.
@@ -2127,6 +2129,21 @@ print(numpy.__path__)    # Ruta del paquete
 print(numpy.__file__)    # Ruta del archivo del módulo
 ```
 
+Imprimir todos los atributos, funciones y clases del módulo `math`:
+
+```python
+import math
+
+for name in dir(math):
+  print(name, end="∖t")
+```
+
+Salida:
+
+```
+__doc__	__loader__ __name__ __package__	__spec__ acos asin atan atan2 ceil copysign cos cosh degrees e erf erfc exp expm1 fabs factorial floor fmod frexp fsum gamma hypot isfinite isinf isnan ldexp lgamma log log10 log1p log2 modf pi pow radians sin sinh sqrt tan tanh trunc
+```
+
 <a name="env"></a>
 
 ## Entornos virtuales
@@ -2243,6 +2260,77 @@ Saber dónde está almacenado el entorno virtual:
 
 ```bash
 pipenv --venv
+```
+
+<a name="platform"></a>
+
+## `platform`
+
+```python
+from platform import platform
+
+print(platform())     # Información del sistema operativo
+print(platform(1))    # Información detallada del sistema operativo
+print(platform(0, 1)) # Información detallada del SO y versión de Python
+```
+
+Ejemplo de salida:
+
+```bash
+Linux-4.4.0-1-rpi2-armv7l-with-debian-9.0
+Linux-4.4.0-1-rpi2-armv7l-with-debian-9.0
+Linux-4.4.0-1-rpi2-armv7l-with-glibc2.9
+```
+
+### `machine`
+
+```python
+from platform import machine
+print(machine())  # Arquitectura del sistema (x86_64, ARM, etc.)
+```
+
+Ejemplo de salida:
+
+```bash
+x86_64
+```
+
+### `processor`, `system`, `version`
+
+```python
+from platform import processor, system, version
+
+print(processor())  # Nombre del procesador
+print(system())     # Nombre del SO (Linux, Windows, Darwin, etc.)
+print(version())    # Versión del SO
+```
+
+Ejemplo de salida:
+
+```bash
+Intel(R) Core(TM) i3-2330M CPU @ 2.20GHz
+Linux
+#1 SMP PREEMPT Fri Jul 21 22:44:37 CEST 2017
+```
+
+### `python_implementation`, `python_version_tuple`
+
+```python
+from platform import python_implementation, python_version_tuple
+
+print(python_implementation())  # Implementación de Python (CPython, PyPy, etc.)
+
+for atr in python_version_tuple():
+    print(atr)  # Versión de Python (major, minor, micro)
+```
+
+Ejemplo de salida:
+
+```bash
+CPython
+3
+7
+10
 ```
 
 <a name="setuptools"></a>
@@ -3041,14 +3129,65 @@ print(fecha3)  # 2024-12-18 00:00:00
 ```python
 import math
 
-math.pi           # Devuelve el número pi
-math.sqrt(9)      # Devuelve la raíz cuadrada de 9
-math.ceil(2.1)    # Devuelve el número 3
-math.floor(2.9)   # Devuelve el número 2
-math.factorial(5) # Devuelve el factorial de 5
-math.pow(2, 3)    # Devuelve 2 elevado a 3
-math.log(10)      # Devuelve el logaritmo natural de 10
-math.exp(1)       # Devuelve e elevado a 1
+math.pi                 # Devuelve el número pi
+math.sqrt(9)            # Devuelve la raíz cuadrada de 9
+math.ceil(2.1)          # Devuelve el número 3
+math.floor(2.9)         # Devuelve el número 2
+math.trunc(2.9)         # Devuelve el número 2
+math.factorial(5)       # Factorial de 5
+math.radians(90)        # Convierte grados a radianes
+math.degrees(math.pi/2) # Convierte radianes a grados
+math.hypot(3, 4)        # Hipotenusa de un triángulo rectángulo con catetos 3 y 4
+
+# Exponenciación
+math.e                  # Número de Euler (e)
+math.exp(1)             # e elevado a 1
+math.log(10)            # Logaritmo natural de 10
+math.log(100, 10)       # Logaritmo de 100 en base 10
+math.log10(100)         # Logaritmo base 10 de 100
+math.log2(8)            # Logaritmo base 2 de 8
+pow(2, 3)               # 2 elevado a 3 (función incorporada)
+
+# Trigonometría
+math.sin(math.pi/2)  # Seno de pi/2
+math.cos(0)          # Coseno de 0
+math.tan(math.pi/4)  # Tangente de pi/4
+math.asin(1)         # Arco seno de 1
+math.acos(1)         # Arco coseno de 1
+math.atan(1)         # Arco tangente de 1
+```
+
+```python
+ad = 90
+ar = radians(ad)
+ad = degrees(ar)
+
+print(ad == 90.)                    # True
+print(ar == pi / 2.)                # True
+print(sin(ar) / cos(ar) == tan(ar)) # True
+print(asin(sin(ar)) == ar)          # True
+```
+
+```python
+from math import e, exp, log
+
+print(pow(e, 1) == exp(log(e)))      # False
+print(pow(2, 2) == exp(2 * log(2)))  # True
+print(log(e, e) == exp(0))           # True
+```
+
+```python
+from math import ceil, floor, trunc
+
+x = 1.4
+y = 2.6
+
+print(floor(x), floor(y))    # 1 2
+print(floor(-x), floor(-y))  # -2 -3
+print(ceil(x), ceil(y))      # 2 3
+print(ceil(-x), ceil(-y))    # -1 -2
+print(trunc(x), trunc(y))    # 1 2
+print(trunc(-x), trunc(-y))  # -1 -2
 ```
 
 <a name="random"></a>
@@ -3058,12 +3197,103 @@ math.exp(1)       # Devuelve e elevado a 1
 ```python
 import random
 
-random.random()                       # Número aleatorio entre 0 y 1
-random.randint(1, 10)                 # Número aleatorio entre 1 y 10
+random.random()                       # Número aleatorio entre 0.0 y 1.0
+```
+
+```python
+from random import random
+
+for i in range(5):
+    print(random())
+```
+
+Ejemplo de salida:
+
+```bash
+0.9535768927411208
+0.5312710096244534
+0.8737691983477731
+0.5896799172452125
+0.02116716297022092
+```
+
+### `seed`
+
+```python
+seed()           # Inicializa la semilla con el valor por defecto (hora actual)
+seed(int_value)  # Fija la semilla para reproducibilidad
+```
+
+```python
+from random import random, seed
+
+seed(42)  # Fija la semilla para reproducibilidad
+
+for i in range(5):
+    print(random())
+```
+
+Salida:
+
+```bash
+0.6394267984578837
+0.025010755222666936
+0.27502931836911926
+0.22321073814882275
+0.7364712141640124
+```
+
+### `randrange` y `randint`
+
+```python
+random.randrange(10)         # Número aleatorio entre 0 y 9
+random.randrange(5, 10)      # Número aleatorio entre 5 y 9
+random.randrange(0, 10, 2)   # Número aleatorio entre 0 y 10 con paso 2
+random.randint(1, 10)        # Número aleatorio entre 1 y 10
+```
+
+> `randrange(a, b)` es equivalente a `randint(a, b-1)`
+
+> Las funciones anteriores tienen una desventaja importante: pueden producir valores repetidos incluso si el número de invocaciones posteriores no es mayor que el rango especificado.
+
+```python
+from random import randint
+
+for i in range(10):
+    print(randint(1, 10), end=',')
+```
+
+Ejemplo de salida:
+
+```bash
+3,7,2,9,1,4,6,2,8,10,
+```
+
+### `choice`, `choices` y `shuffle`
+
+```python
+random.choice(secuencia)
+random.choices(secuencia, elementos_a_elegir=n)
+random.shuffle(lista)
+```
+
+```python
 random.choice([1, 2, 3, 4, 5])        # Elemento aleatorio de la lista
 random.choices([1, 2, 3, 4, 5], k=3)  # Lista de 3 elementos aleatorios de la lista
 random.shuffle([1, 2, 3, 4, 5])       # Mezcla los elementos de la lista
 ```
+
+```python
+from random import choice, sample, shuffle
+
+alumnos = ["Ana", "Luis", "María", "Juan", "Rocío"]
+print(choice(alumnos))      # 'María' (por ejemplo)
+print(sample(alumnos, 2))   # ['Juan', 'Ana'] (por ejemplo)
+shuffle(alumnos)
+print(alumnos)  # ['Rocío', 'Ana', 'Juan', 'Luis', 'María'] (por ejemplo)
+```
+
+### Generar contraseñas aleatorias
 
 ```python
 import string
